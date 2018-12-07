@@ -8,7 +8,7 @@ def check_is_opposites(character1, character2):
     )
 
 
-def collapse_opposite_polarity_characters(input_string):
+def collapse_opposite_polarity_characters(input_string, characters_to_skip=None):
     remaining_characters = []
 
     def collapse_previous_characters():
@@ -24,6 +24,9 @@ def collapse_opposite_polarity_characters(input_string):
                 break
 
     for character in input_string:
+        if characters_to_skip and character in characters_to_skip:
+            continue
+
         remaining_characters.append(character)
         collapse_previous_characters()
 
@@ -39,6 +42,18 @@ def main():
 
     collapsed_string = collapse_opposite_polarity_characters(input_string)
     print(len(collapsed_string))
+
+    unique_characters = set(map(str.lower, input_string))
+    shortest_collapsed_string_length = min(
+        len(
+            collapse_opposite_polarity_characters(
+                input_string,
+                characters_to_skip={character, character.upper()},
+            )
+        )
+        for character in unique_characters
+    )
+    print(shortest_collapsed_string_length)
 
 
 if __name__ == "__main__":
